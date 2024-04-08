@@ -1,0 +1,2 @@
+def fruit():
+    return None
