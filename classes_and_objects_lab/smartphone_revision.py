@@ -8,7 +8,7 @@ class Smartphone:
         self.is_on = not self.is_on
 
     def install(self, app, app_memory):
-        if self.memory >= app_memory and not self.is_on:
+        if not self.is_on:
             return f"Turn on your phone to install {app}"
         if self.memory < app_memory:
             return f"Not enough memory to install {app}"
