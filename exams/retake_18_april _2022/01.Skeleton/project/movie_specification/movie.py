@@ -41,16 +41,6 @@ class Movie(ABC):
         validate_value_is_of_type(value, User, 'The owner must be an object of type User!')
         self.__owner = value
 
-    # @property
-    # @abstractmethod
-    # def age_restriction(self):
-    #     return
-    #
-    # @age_restriction.setter
-    # def age_restriction(self, value):
-    #     pass
-
     @abstractmethod
     def details(self):
-
         return

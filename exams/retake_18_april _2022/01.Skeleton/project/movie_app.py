@@ -1,6 +1,3 @@
-# 121/150 in Judje. Need to find mistake
-
-
 from project.movie_specification.movie import Movie
 from project.user import User
 
@@ -12,22 +9,22 @@ class MovieApp:
 
     def register_user(self, username: str, age: int):
         user = self.__find_user_by_username(username)
-        if user is not None:
+        if user:
             raise Exception('User already exists!')
         user = User(username, age)
         self.users_collection.append(user)
-        return f'{username} registered successfully.'
+        return f'{user.username} registered successfully.'
 
     def upload_movie(self, username: str, movie: Movie):
         user = self.__find_user_by_username(username)
 
-        if not user:
+        if user is None:
             raise Exception('This user does not exist!')
 
         if movie in self.movies_collection:
             raise Exception('Movie already added to the collection!')
 
-        if username != movie.owner.username:
+        if user.username != movie.owner.username:
             raise Exception(f'{user.username} is not the owner of the movie {movie.title}!')
 
         user.movies_owned.append(movie)
@@ -39,7 +36,7 @@ class MovieApp:
 
         if movie not in self.movies_collection:
             raise Exception(f'The movie {movie.title} is not uploaded!')
-        if username != movie.owner.username:
+        if user.username != movie.owner.username:
             raise Exception(f'{username} is not the owner of the movie {movie.title}!')
 
         for attribute, new_value in kwargs.items():
@@ -52,7 +49,7 @@ class MovieApp:
         if movie not in self.movies_collection:
             raise Exception(f'The movie {movie.title} is not uploaded!')
 
-        if username != movie.owner.username:
+        if user.username != movie.owner.username:
             raise Exception(f'{username} is not the owner of the movie {movie.title}!')
 
         user.movies_owned.remove(movie)
@@ -62,7 +59,7 @@ class MovieApp:
     def like_movie(self, username: str, movie: Movie):
         user = self.__find_user_by_username(username)
 
-        if username == movie.owner.username:
+        if user.username == movie.owner.username:
             raise Exception(f"{username} is the owner of the movie {movie.title}!")
 
         if movie in user.movies_liked:
@@ -91,11 +88,18 @@ class MovieApp:
         return '\n'.join(m for m in result)
 
     def __str__(self):
-        usernames = [u.username for u in self.users_collection]
-        output = 'All users: No users.' if not self.users_collection else f"All users: {', '.join(usernames)}" + '\n'
+        output = ''
+        if self.users_collection:
+            usernames = [u.username for u in self.users_collection]
+            output = f"All users: {', '.join(usernames)}" + '\n'
+        else:
+            output = 'All users: No users.' + '\n'
 
-        movies = [m.title for m in self.movies_collection]
-        output += 'All movies: No movies.' if not self.movies_collection else f"All movies: {', '.join(movies)}"
+        if self.movies_collection:
+            movies = [m.title for m in self.movies_collection]
+            output += f"All movies: {', '.join(movies)}" + '\n'
+        else:
+            output += 'All movies: No movies.'
 
         return output.strip()
 

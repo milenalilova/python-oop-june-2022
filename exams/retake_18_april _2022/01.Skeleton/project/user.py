@@ -26,16 +26,39 @@ class User:
         validate_value_above_num(value, 6, 'Users under the age of 6 are not allowed!')
         self.__age = value
 
+    # This fails 5 tests. To find out how exactly.
+    # def __str__(self):
+    #     output = f"Username: {self.username}, Age: {self.age}" + '\n'
+    #     if not self.movies_liked:
+    #         output += 'No movies liked.' + '\n'
+    #     else:
+    #         output += 'Liked movies:' + '\n' + '\n'.join([m.details for m in self.movies_liked])
+    #
+    #     if not self.movies_owned:
+    #         output += 'No movies owned.' + '\n'
+    #     else:
+    #         output += 'Owned movies:' + '\n' + '\n'.join(m.details for m in self.movies_owned)
+    #
+    #     return output.strip()
+
     def __str__(self):
-        output = f"Username: {self.__username}, Age: {self.__age}" + '\n'
-        if not self.movies_liked:
-            output += 'No movies liked.' + '\n'
-        else:
-            output += 'Liked movies:' + '\n' + '\n'.join([m.details for m in self.movies_liked])
+        result = [f"Username: {self.username}, Age: {self.age}", "Liked movies:"]
 
-        if not self.movies_owned:
-            output += 'No movies owned.' + '\n'
-        else:
-            output += 'Owned movies:' + '\n' + '\n'.join(m.details for m in self.movies_owned)
+        if self.movies_liked:
+            movies_liked = [movie.details() for movie in self.movies_liked]
+            result.append('\n'.join(movies_liked))
 
-        return output.strip()
+        else:
+            result.append("No movies liked.")
+
+        result.append("Owned movies:")
+
+        if self.movies_owned:
+            movies_owned = [movie.details() for movie in self.movies_owned]
+            result.append('\n'.join(movies_owned))
+
+        else:
+            result.append("No movies owned.")
+
+        return '\n'.join(result)
+
